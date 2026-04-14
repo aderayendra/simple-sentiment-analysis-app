@@ -6,9 +6,7 @@ from sentiment_utils import preprocess_text
 INPUT_FILE = "dataset/imdb_dataset.csv"
 OUTPUT_FILE = "dataset/dataset.csv"
 
-
-
-# --- 3. MAIN WORKFLOW ---
+# --- 2. MAIN WORKFLOW ---
 try:
     # Load the CSV data
     df = pd.read_csv(INPUT_FILE)

@@ -14,9 +14,6 @@ RF_VECTORIZER_PATH = os.path.join(settings.BASE_DIR, 'model', 'rf_tfidf_vectoriz
 MODELS = {}
 VECTORIZERS = {}
 
-
-
-
 def load_models():
     """Load both models and vectorizers if they exist."""
     # Decision Tree
