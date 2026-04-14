@@ -10,7 +10,6 @@ import os
 DATASET_PATH = r'D:\Projects\sentiment-analysis-app\dataset\dataset.csv'
 MODEL_DIR = r'D:\Projects\sentiment-analysis-app\model'
 MODEL_PATH = os.path.join(MODEL_DIR, 'rf_sentiment_model.joblib')
-# Vectorizer can be shared or separate, but for RF we'll use the same settings as DT for consistency in preprocessing
 VECTORIZER_PATH = os.path.join(MODEL_DIR, 'rf_tfidf_vectorizer.joblib')
 
 
