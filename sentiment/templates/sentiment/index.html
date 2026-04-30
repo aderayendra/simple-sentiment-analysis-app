@@ -2,92 +2,151 @@
 <html>
 <head>
     <title>Sentiment Analysis App</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700;800&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 600px;
-            margin: 40px auto;
-            padding: 20px;
-            line-height: 1.6;
-            background-color: #121212;
-            color: #e0e0e0;
+        :root {
+            --bg: #eef3f8;
+            --card: #ffffff;
+            --card-border: #dbe5ef;
+            --text: #243447;
+            --muted: #5f7184;
+            --accent: #4f86c6;
+            --accent-hover: #3e74b4;
         }
 
-        .container {
-            border: 1px solid #333;
-            background-color: #1e1e1e;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-        }
-
-        h1 {
-            color: #ffffff;
-            text-align: center;
-        }
-
-        textarea {
-            width: 100%;
-            height: 100px;
-            padding: 10px;
-            margin-bottom: 10px;
-            background-color: #2c2c2c;
-            color: #ffffff;
-            border: 1px solid #444;
-            border-radius: 4px;
+        * {
             box-sizing: border-box;
         }
 
+        body {
+            font-family: 'Outfit', sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            padding: 24px;
+            line-height: 1.6;
+            color: var(--text);
+            display: grid;
+            place-items: center;
+            background: linear-gradient(180deg, #f4f7fb 0%, var(--bg) 100%);
+        }
+
+        .container {
+            width: min(700px, 100%);
+            border: 1px solid var(--card-border);
+            background: var(--card);
+            padding: 28px;
+            border-radius: 14px;
+            box-shadow: 0 10px 24px rgba(34, 52, 72, 0.08);
+        }
+
+        h1 {
+            color: var(--text);
+            text-align: center;
+            margin: 0 0 6px;
+            font-size: clamp(1.7rem, 3vw, 2.2rem);
+            letter-spacing: 0.1px;
+        }
+
+        .subtitle {
+            margin: 0 0 22px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.98rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #3d4f63;
+        }
+
+        textarea,
         select {
-            background-color: #2c2c2c;
-            color: #ffffff;
+            width: 100%;
+            padding: 11px 12px;
+            background: #fbfdff;
+            color: var(--text);
+            border: 1px solid #cfd9e4;
+            border-radius: 8px;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+        }
+
+        textarea {
+            min-height: 130px;
+            margin-bottom: 14px;
+            resize: vertical;
+        }
+
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(79, 134, 198, 0.16);
         }
 
         button {
-            background-color: #0d6efd;
+            background: var(--accent);
             color: white;
-            padding: 10px 20px;
+            padding: 12px 20px;
             border: none;
-            border-radius: 4px;
+            border-radius: 8px;
             cursor: pointer;
             width: 100%;
-            font-size: 16px;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.2px;
+            transition: background-color 0.2s ease, box-shadow 0.2s ease;
         }
 
         button:hover {
-            background-color: #0b5ed7;
+            background: var(--accent-hover);
+            box-shadow: 0 6px 16px rgba(79, 134, 198, 0.2);
         }
 
         .result {
             margin-top: 20px;
             padding: 15px;
-            border-radius: 4px;
+            border-radius: 10px;
             text-align: center;
             font-weight: bold;
         }
 
         .positive {
-            background-color: #1e3a1e;
-            color: #d4edda;
-            border: 1px solid #2d5a2d;
+            background: #edf8f1;
+            color: #2f6b49;
+            border: 1px solid #cde9d7;
         }
 
         .negative {
-            background-color: #3a1e1e;
-            color: #f8d7da;
-            border: 1px solid #5a2d2d;
+            background: #fbeff0;
+            color: #8a3e44;
+            border: 1px solid #f2d0d3;
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding: 14px;
+            }
+
+            .container {
+                padding: 20px;
+                border-radius: 12px;
+            }
         }
     </style>
 </head>
 <body>
 <div class="container">
     <h1>Sentiment Analysis</h1>
+    <p class="subtitle">Pick a model, enter a sentence, and get instant sentiment feedback.</p>
     <form id="sentimentForm" method="post">
         {% csrf_token %}
-        <div style="margin-bottom: 10px;">
+        <div style="margin-bottom: 12px;">
             <label for="modelSelect">Select Model:</label>
-            <select id="modelSelect" name="model_type"
-                    style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #444;">
+            <select id="modelSelect" name="model_type">
                 <option value="dt">Decision Tree</option>
                 <option value="rf" selected>Random Forest (Higher Accuracy)</option>
             </select>
@@ -98,7 +157,7 @@
 
     <div id="resultContainer" class="result" style="display: none;">
         Sentiment: <span id="sentimentValue"></span><br>
-        <small style="font-weight: normal; color: #aaa;">Model used: <span id="modelUsed"></span></small>
+        <small style="font-weight: normal; color: #5f7184;">Model used: <span id="modelUsed"></span></small>
     </div>
 </div>
 
